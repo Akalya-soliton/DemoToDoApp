@@ -1,4 +1,4 @@
-﻿namespace ToDoApp.Enums
+﻿namespace ToDoApp.TodoApp.Core.Enums
 {
     public enum RecurrenceType
     {
