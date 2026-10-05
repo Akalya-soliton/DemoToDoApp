@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using ToDoApp.Enums;
-using ToDoApp.Models;
+using ToDoApp.Core.Models;
+using ToDoApp.DTOs.Request;
+using ToDoApp.Services;
 
 namespace ToDoApp.Controllers
 {
@@ -8,65 +9,46 @@ namespace ToDoApp.Controllers
     [ApiController]
     public class TodoController : ControllerBase
     {
-        private static int nextId;
-        private static List<TaskInfo> tasks = new()
-        {  new TaskInfo { Id = nextId++, TaskName = "Task 1", CreatedAt = DateTime.Now, DueDate = DateTime.Now.AddDays(1), IsCompleted = false, Recurrence = RecurrenceType.None, TaskDescription = "Description for Task 1" },
-           new TaskInfo { Id = nextId++, TaskName = "Task 2", CreatedAt = DateTime.Now, DueDate = DateTime.Now.AddDays(2), IsCompleted = true, Recurrence = RecurrenceType.None, TaskDescription = "Description for Task 2" },
-           new TaskInfo { Id = nextId++, TaskName = "Task 3", CreatedAt = DateTime.Now, DueDate = DateTime.Now.AddDays(3), IsCompleted = true, Recurrence = RecurrenceType.None, TaskDescription = "Description for Task 3" }
-        };
-
-        [HttpGet]
-        public ActionResult<IEnumerable<TaskInfo>> GetAll()
+        public readonly ITodoService _todoService;
+        public TodoController(ITodoService todoService)
         {
+            _todoService = todoService;
+        }
+        [HttpGet]
+        public async Task<ActionResult<IEnumerable<TaskInfo>>> GetAllTasks()
+        {
+            var tasks = await _todoService.GetAllTasksAsync();
             return Ok(tasks);
         }
-
         [HttpGet("{id}")]
-        public ActionResult<TaskInfo> Get(int id)
+        public async Task<ActionResult<TaskInfo?>> GetTaskById(int id)
         {
-            var task = tasks.FirstOrDefault(t => t.Id == id);
+            var task = await _todoService.GetTaskByIdAsync(id);
             if (task == null)
-            {
                 return NotFound();
-            }
             return Ok(task);
         }
-
         [HttpPost]
-        public ActionResult<TaskInfo> Post([FromBody] TaskInfo task)
+        public async Task<ActionResult<TaskInfo>> CreateTask([FromBody] TaskRequest task)
         {
-            task.Id = nextId++;
-            tasks.Add(task);
-            return CreatedAtAction(nameof(Get), new { id = task.Id }, task);
+            var createdTask = await _todoService.CreateTaskAsync(task);
+            return CreatedAtAction(nameof(GetTaskById), new { id = createdTask.Id }, createdTask);
         }
-
         [HttpDelete("{id}")]
-        public ActionResult Delete(int id)
+        public async Task<ActionResult<bool>> DeleteTask(int id)
         {
-            var task = tasks.FirstOrDefault(t => t.Id == id);
-            if (task == null)
-            {
+            var result = await _todoService.DeleteTaskAsync(id);
+            if (!result)
                 return NotFound();
-            }
-            tasks.Remove(task);
-            return NoContent();
+            return Ok(result);
         }
-
         [HttpPut("{id}")]
-        public ActionResult Update(int id, [FromBody] TaskInfo updatedTask)
+        public async Task<ActionResult<bool>> UpdateTask(int id, [FromBody] TaskRequest task)
         {
-            var task = tasks.FirstOrDefault(task => task.Id == id);
-            if (task == null)
-            {
+            var result = await _todoService.UpdateTaskAsync(id, task);
+            if (!result)
                 return NotFound();
-            }
-            task.DueDate = updatedTask.DueDate;
-            task.Recurrence = updatedTask.Recurrence;
-            task.TaskName = updatedTask.TaskName;
-            task.CreatedAt = updatedTask.CreatedAt;
-            task.TaskDescription = updatedTask.TaskDescription;
-            task.IsCompleted = updatedTask.IsCompleted;
-            return NoContent();
+            return Ok(result);
         }
     }
 }

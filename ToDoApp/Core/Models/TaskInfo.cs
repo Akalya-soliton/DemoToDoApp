@@ -1,6 +1,6 @@
-﻿using ToDoApp.Enums;
+﻿using ToDoApp.Core.Enums;
 
-namespace ToDoApp.Models
+namespace ToDoApp.Core.Models
 {
     public class TaskInfo
     {

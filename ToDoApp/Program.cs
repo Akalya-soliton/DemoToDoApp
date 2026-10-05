@@ -1,4 +1,6 @@
 using Scalar.AspNetCore;
+using ToDoApp.Repositories;
+using ToDoApp.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -7,7 +9,8 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
-
+builder.Services.AddSingleton<ITodoRepository, InMemoryTodoRepository>();
+builder.Services.AddScoped<ITodoService, TodoService>();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
