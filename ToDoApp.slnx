@@ -1,3 +1,8 @@
 <Solution>
-  <Project Path="ToDoApp/ToDoApp.csproj" />
+  <Project Path="TodoApp.Application/TodoApp.Application.csproj" Id="3df4791e-7c9c-4dc3-bb0b-b4e9759de714" />
+  <Project Path="ToDoApp.Core/ToDoApp.Core.csproj" Id="6029a849-ceeb-42e0-8182-709a953e2f73" />
+  <Project Path="ToDoApp.Dto/ToDoApp.Dto.csproj" Id="c78dfb45-1493-44ca-82ae-7bb4dd90f4c5" />
+  <Project Path="ToDoApp.Repo.DataBase/ToDoApp.DataBaseRepo.csproj" Id="521fc807-3ad0-48bd-bcc8-482f190aceae" />
+  <Project Path="ToDoApp.Repository/ToDoApp.InMemoryRepo.csproj" Id="c88b7ea9-8e63-46f5-a51e-b5a9ddfbdb18" />
+  <Project Path="ToDoApp/ToDoApp.WebApi.csproj" />
 </Solution>

@@ -1,6 +1,6 @@
 ﻿using ToDoApp.Core.Models;
-using ToDoApp.DTOs.Request;
-using ToDoApp.Repositories;
+using ToDoApp.Core.Repositories;
+using ToDoApp.Core.Services;
 
 namespace ToDoApp.Services
 {
@@ -19,7 +19,7 @@ namespace ToDoApp.Services
         {
             return await _todoRepository.GetByIdAsync(id);
         }
-        public async Task<TaskInfo> CreateTaskAsync(TaskRequest request)
+        public async Task<TaskInfo> CreateTaskAsync(TaskInfo request)
         {
             var task = new TaskInfo
             {
@@ -32,7 +32,7 @@ namespace ToDoApp.Services
             };
             return await _todoRepository.CreateAsync(task);
         }
-        public async Task<bool> UpdateTaskAsync(int id, TaskRequest request)
+        public async Task<bool> UpdateTaskAsync(int id, TaskInfo request)
         {
             var existingTask = await _todoRepository.GetByIdAsync(id);
             if (existingTask == null)

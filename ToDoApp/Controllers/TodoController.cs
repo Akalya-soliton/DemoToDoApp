@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using ToDoApp.Core.Models;
+using ToDoApp.Core.Services;
 using ToDoApp.DTOs.Request;
-using ToDoApp.Services;
 
 namespace ToDoApp.Controllers
 {
@@ -31,7 +31,15 @@ namespace ToDoApp.Controllers
         [HttpPost]
         public async Task<ActionResult<TaskInfo>> CreateTask([FromBody] TaskRequest task)
         {
-            var createdTask = await _todoService.CreateTaskAsync(task);
+            var createdTask = await _todoService.CreateTaskAsync(new TaskInfo()
+            {
+                TaskName = task.TaskName,
+                TaskDescription = task.TaskDescription,
+                IsCompleted = task.IsCompleted,
+                Recurrence = task.Recurrence,
+                CreatedAt = DateTime.Now,
+                DueDate = task.DueDate
+            });
             return CreatedAtAction(nameof(GetTaskById), new { id = createdTask.Id }, createdTask);
         }
         [HttpDelete("{id}")]
@@ -45,7 +53,14 @@ namespace ToDoApp.Controllers
         [HttpPut("{id}")]
         public async Task<ActionResult<bool>> UpdateTask(int id, [FromBody] TaskRequest task)
         {
-            var result = await _todoService.UpdateTaskAsync(id, task);
+            var result = await _todoService.UpdateTaskAsync(id, new TaskInfo()
+            {
+                TaskName = task.TaskName,
+                TaskDescription = task.TaskDescription,
+                IsCompleted = task.IsCompleted,
+                Recurrence = task.Recurrence,
+                DueDate = task.DueDate
+            });
             if (!result)
                 return NotFound();
             return Ok(result);

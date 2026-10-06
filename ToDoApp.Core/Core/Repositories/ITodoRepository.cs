@@ -1,5 +1,5 @@
 ﻿using ToDoApp.Core.Models;
-namespace ToDoApp.Repositories
+namespace ToDoApp.Core.Repositories
 
 {
     public interface ITodoRepository

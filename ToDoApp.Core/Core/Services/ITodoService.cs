@@ -1,14 +1,13 @@
 ﻿using ToDoApp.Core.Models;
-using ToDoApp.DTOs.Request;
 
-namespace ToDoApp.Services
+namespace ToDoApp.Core.Services
 {
     public interface ITodoService
     {
         Task<IEnumerable<TaskInfo>> GetAllTasksAsync();
         Task<TaskInfo?> GetTaskByIdAsync(int id);
-        Task<TaskInfo> CreateTaskAsync(TaskRequest task);
-        Task<bool> UpdateTaskAsync(int id, TaskRequest task);
+        Task<TaskInfo> CreateTaskAsync(TaskInfo task);
+        Task<bool> UpdateTaskAsync(int id, TaskInfo task);
         Task<bool> DeleteTaskAsync(int id);
     }
 }
